@@ -14,15 +14,11 @@ namespace LegacyOrderService.Data
             ["Doohickey"] = 8.75
         };
 
-        public double GetPrice(string productName)
+        public bool TryGetPrice(string productName, out double price)
         {
             // Simulate an expensive lookup
             Thread.Sleep(500);
-
-            if (_productPrices.TryGetValue(productName, out var price))
-                return price;
-
-            throw new Exception("Product not found");
+            return _productPrices.TryGetValue(productName, out price);
         }
     }
 }
