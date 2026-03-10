@@ -1,5 +1,5 @@
 using LegacyOrderService.Data;
-using LegacyOrderService.Models;
+using LegacyOrderService.Services;
 
 namespace LegacyOrderService
 {
@@ -8,6 +8,7 @@ namespace LegacyOrderService
         static async Task Main(string[] args)
         {
             Console.WriteLine("Welcome to Order Processor!");
+
             Console.WriteLine("Enter customer name:");
             string name = Console.ReadLine();
 
@@ -26,17 +27,6 @@ namespace LegacyOrderService
                 return;
             }
 
-            var productRepo = new ProductRepository();
-            var result = await productRepo.TryGetPriceAsync(product);
-
-            if (!result.found)
-            {
-                Console.WriteLine("Product not found.");
-                return;
-            }
-
-            double price = result.price;
-
             Console.WriteLine("Enter quantity:");
 
             if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
@@ -45,13 +35,19 @@ namespace LegacyOrderService
                 return;
             }
 
+            var productRepo = new ProductRepository();
+            var orderRepo = new OrderRepository();
+            var orderService = new OrderService(productRepo, orderRepo);
+
             Console.WriteLine("Processing order...");
 
-            Order order = new Order();
-            order.CustomerName = name;
-            order.ProductName = product;
-            order.Quantity = qty;
-            order.Price = price;
+            var order = await orderService.CreateOrderAsync(name, product, qty);
+
+            if (order == null)
+            {
+                Console.WriteLine("Product not found.");
+                return;
+            }
 
             double total = order.Quantity * order.Price;
 
@@ -62,8 +58,8 @@ namespace LegacyOrderService
             Console.WriteLine("Total: $" + total);
 
             Console.WriteLine("Saving order to database...");
-            var repo = new OrderRepository();
-            repo.Save(order);
+            orderService.SaveOrder(order);
+
             Console.WriteLine("Done.");
         }
     }
