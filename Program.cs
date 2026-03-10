@@ -10,31 +10,9 @@ namespace LegacyOrderService
         {
             Console.WriteLine("Welcome to Order Processor!");
 
-            Console.WriteLine("Enter customer name:");
-            string name = Console.ReadLine();
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                Console.WriteLine("Customer name cannot be empty.");
-                return;
-            }
-
-            Console.WriteLine("Enter product name:");
-            string product = Console.ReadLine();
-
-            if (string.IsNullOrWhiteSpace(product))
-            {
-                Console.WriteLine("Product name cannot be empty.");
-                return;
-            }
-
-            Console.WriteLine("Enter quantity:");
-
-            if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
-            {
-                Console.WriteLine("Quantity must be a positive number.");
-                return;
-            }
+            string name = ReadRequiredString("Enter customer name:");
+            string product = ReadRequiredString("Enter product name:");
+            int qty = ReadQuantity();
 
             IProductRepository productRepo = new ProductRepository();
             IOrderRepository orderRepo = new OrderRepository();
@@ -61,6 +39,32 @@ namespace LegacyOrderService
             orderService.SaveOrder(order);
 
             Console.WriteLine("Done.");
+        }
+
+        static string ReadRequiredString(string prompt)
+        {
+            while (true)
+            {
+                Console.WriteLine(prompt);
+                var input = Console.ReadLine();
+
+                if (!string.IsNullOrWhiteSpace(input))
+                    return input;
+
+                Console.WriteLine("Value cannot be empty.");
+            }
+        }
+        static int ReadQuantity()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter quantity:");
+
+                if (int.TryParse(Console.ReadLine(), out int qty) && qty > 0)
+                    return qty;
+
+                Console.WriteLine("Quantity must be a positive number.");
+            }
         }
     }
 }
