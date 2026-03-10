@@ -12,8 +12,21 @@ namespace LegacyOrderService
             Console.WriteLine("Enter customer name:");
             string name = Console.ReadLine();
 
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Customer name cannot be empty.");
+                return;
+            }
+
             Console.WriteLine("Enter product name:");
             string product = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(product))
+            {
+                Console.WriteLine("Product name cannot be empty.");
+                return;
+            }
+
             var productRepo = new ProductRepository();
             if (!productRepo.TryGetPrice(product, out double price))
             {
@@ -21,9 +34,13 @@ namespace LegacyOrderService
                 return;
             }
 
-
             Console.WriteLine("Enter quantity:");
-            int qty = Convert.ToInt32(Console.ReadLine());
+
+            if (!int.TryParse(Console.ReadLine(), out int qty) || qty <= 0)
+            {
+                Console.WriteLine("Quantity must be a positive number.");
+                return;
+            }
 
             Console.WriteLine("Processing order...");
 
