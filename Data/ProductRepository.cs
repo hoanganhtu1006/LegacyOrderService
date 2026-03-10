@@ -1,7 +1,9 @@
 ﻿// Data/ProductRepository.cs
+using LegacyOrderService.Interfaces;
+
 namespace LegacyOrderService.Data
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly Dictionary<string, double> _productPrices = new()
         {

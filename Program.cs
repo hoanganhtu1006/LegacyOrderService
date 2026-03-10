@@ -1,4 +1,5 @@
 using LegacyOrderService.Data;
+using LegacyOrderService.Interfaces;
 using LegacyOrderService.Services;
 
 namespace LegacyOrderService
@@ -35,8 +36,9 @@ namespace LegacyOrderService
                 return;
             }
 
-            var productRepo = new ProductRepository();
-            var orderRepo = new OrderRepository();
+            IProductRepository productRepo = new ProductRepository();
+            IOrderRepository orderRepo = new OrderRepository();
+
             var orderService = new OrderService(productRepo, orderRepo);
 
             Console.WriteLine("Processing order...");
