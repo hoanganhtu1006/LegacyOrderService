@@ -11,11 +11,11 @@ namespace LegacyOrderService.Data
 
         public void Save(Order order)
         {
-            var connection = new SqliteConnection(_connectionString);
+            using var connection = new SqliteConnection(_connectionString);
 
             connection.Open();
 
-            var command = connection.CreateCommand();
+            using var command = connection.CreateCommand();
             command.CommandText = @"
                 INSERT INTO Orders (CustomerName, ProductName, Quantity, Price)
                 VALUES ($customer, $product, $quantity, $price)";
