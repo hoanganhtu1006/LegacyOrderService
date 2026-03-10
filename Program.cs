@@ -1,12 +1,11 @@
-using System;
-using LegacyOrderService.Models;
 using LegacyOrderService.Data;
+using LegacyOrderService.Models;
 
 namespace LegacyOrderService
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("Welcome to Order Processor!");
             Console.WriteLine("Enter customer name:");
@@ -28,11 +27,15 @@ namespace LegacyOrderService
             }
 
             var productRepo = new ProductRepository();
-            if (!productRepo.TryGetPrice(product, out double price))
+            var result = await productRepo.TryGetPriceAsync(product);
+
+            if (!result.found)
             {
                 Console.WriteLine("Product not found.");
                 return;
             }
+
+            double price = result.price;
 
             Console.WriteLine("Enter quantity:");
 
