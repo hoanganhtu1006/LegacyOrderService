@@ -15,7 +15,11 @@ namespace LegacyOrderService
             Console.WriteLine("Enter product name:");
             string product = Console.ReadLine();
             var productRepo = new ProductRepository();
-            double price = productRepo.GetPrice(product);
+            if (!productRepo.TryGetPrice(product, out double price))
+            {
+                Console.WriteLine("Product not found.");
+                return;
+            }
 
 
             Console.WriteLine("Enter quantity:");
