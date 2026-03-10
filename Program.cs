@@ -51,13 +51,11 @@ namespace LegacyOrderService
                 return;
             }
 
-            double total = order.Quantity * order.Price;
-
             Console.WriteLine("Order complete!");
             Console.WriteLine("Customer: " + order.CustomerName);
             Console.WriteLine("Product: " + order.ProductName);
             Console.WriteLine("Quantity: " + order.Quantity);
-            Console.WriteLine("Total: $" + total);
+            Console.WriteLine("Total: $" + order.Total);
 
             Console.WriteLine("Saving order to database...");
             orderService.SaveOrder(order);
