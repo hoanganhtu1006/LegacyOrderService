@@ -1,14 +1,14 @@
-﻿using LegacyOrderService.Data;
+﻿using LegacyOrderService.Interfaces;
 using LegacyOrderService.Models;
 
 namespace LegacyOrderService.Services;
 
 public class OrderService
 {
-    private readonly ProductRepository _productRepository;
-    private readonly OrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IOrderRepository _orderRepository;
 
-    public OrderService(ProductRepository productRepository, OrderRepository orderRepository)
+    public OrderService(IProductRepository productRepository, IOrderRepository orderRepository)
     {
         _productRepository = productRepository;
         _orderRepository = orderRepository;
